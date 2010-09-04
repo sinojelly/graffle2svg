@@ -384,6 +384,13 @@ class GraffleParser(object):
             self.svg_addBezier(self.svg_current_layer,
                                         bounds, graphic["ShapeData"],
                                         **extra_opts)
+        elif shape == "AdjustableArrow":
+            bounds = self.extractBoundCOordinates(graphic["Bounds"])
+            self.svg_addAdjustableArrow(self.svg_current_layer,
+                                        bounds = bounds,
+                                        graphic = graphic,
+                                        **extra_opts \
+                                        )
         else:
             print "Don't know how to display Shape %s"%str(graphic['Shape'])
             
@@ -595,6 +602,14 @@ class GraffleParser(object):
         circle_tag.setAttribute("ry", str(ry))
         node.appendChild(circle_tag)
 
+    def svg_addAdjustableArrow(self, node, bounds, graphic,**opts):
+        x,y,width,height = [float(a) for a in bounds]
+        ratio = float(graphic["ShapeData"]["ratio"])
+        neck = float(graphic["ShapeData"]["width"])
+        neck_delta = height*(1-ratio)/2
+        self.svg_addPath(node,[[x,y+neck_delta], [x+width-neck,y+neck_delta], [x+width-neck,y],
+                          [x+width,y+height/2], [x+width-neck,y+height], [x+width-neck,y+height-neck_delta],
+                          [x,y+height-neck_delta]],closepath=True,**opts) 
                              
     def svg_addPath(self, node, pts, **opts):
         # do geometry mapping here
