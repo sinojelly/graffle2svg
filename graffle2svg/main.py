@@ -327,7 +327,7 @@ class GraffleParser(object):
         if graphic.get("Rotation") is not None:
             extra_opts["Rotation"] = float(graphic["Rotation"])
             
-        if shape == 'Rectangle':
+        if shape in ("Rectangle", "RoundRect"):
             coords = self.extractBoundCOordinates(graphic['Bounds'])
             if graphic.get("ImageID") is not None:
                 # TODO: images
