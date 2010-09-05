@@ -521,7 +521,7 @@ class GraffleParser(object):
         if "DropShadow" in self.required_defs:
             p = xml.dom.minidom.parseString("""
             <defs><filter id="DropShadow" filterRes="100" x="0" y="0">
-               <feGaussianBlur stdDeviation="3" result="myblur"/>
+               <feGaussianBlur stdDeviation="3" result="MyBlur"/>
                <feOffset in="MyBlur" dx="2" dy="4" result="movedBlur"/>
                <feMerge>
                    <feMergeNode in="movedBlur"/>
