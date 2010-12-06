@@ -11,7 +11,7 @@
 #THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import gzip
-
+import zipfile
 
 class GraffleFilePack(object):
     __file = None
@@ -21,6 +21,10 @@ class GraffleFilePack(object):
             self.__file = open(fn,"r")
         elif self.detectGZipXMLFile(fn):
             self.__file = gzip.open(fn, "rb")
+        elif self.detectZipFile(fn):
+            self.__file = zipfile.ZipFile(fn, 'rb')
+        else: 
+            raise Exception('Unknown File Type')
             
     def read(self):
         return self.__file.read()
@@ -29,8 +33,18 @@ class GraffleFilePack(object):
         self.__file.close()
     
     def detectGZipXMLFile(self,fn):
-        f = gzip.open(fn, 'rb')
-        return self.detectXML(f.readline())
+        try:
+            f = gzip.open(fn, 'rb')
+            return self.detectXML(f.readline())
+        except:
+            return False
+
+    def detectZipFile(self, fn):
+        try: 
+            f = zipfile.ZipFile(fn, 'rb')
+            return self.detectXML(f.readline())
+        except:
+            return False
         
     def detectXMLFile(self,fn):
         """Is this an xml file"""
