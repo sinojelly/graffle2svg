@@ -391,6 +391,12 @@ class GraffleParser(object):
                                         graphic = graphic,
                                         **extra_opts \
                                         )
+        elif shape == "Diamond":
+            bounds = self.extractBoundCOordinates(graphic["Bounds"])
+            self.svg_addDiamond(self.svg_current_layer,
+                                        bounds = bounds,
+                                        **extra_opts \
+                                        )
         else:
             print "Don't know how to display Shape %s"%str(graphic['Shape'])
             
@@ -609,7 +615,15 @@ class GraffleParser(object):
         neck_delta = height*(1-ratio)/2
         self.svg_addPath(node,[[x,y+neck_delta], [x+width-neck,y+neck_delta], [x+width-neck,y],
                           [x+width,y+height/2], [x+width-neck,y+height], [x+width-neck,y+height-neck_delta],
-                          [x,y+height-neck_delta]],closepath=True,**opts) 
+                          [x,y+height-neck_delta]],closepath=True,**opts)
+
+    def svg_addDiamond(self, node, bounds, **opts):
+        x, y, width, height = [float(a) for a in bounds]
+        self.svg_addPath(node,[[x + (width / 2), y],
+                               [x + width, y + (height / 2)],
+                               [x + (width / 2), y + height],
+                               [x, y + (height / 2)]],
+                                closepath=True, **opts)
                              
     def svg_addPath(self, node, pts, **opts):
         # do geometry mapping here
