@@ -480,6 +480,12 @@ class GraffleParser(object):
             
         fontfam = font.get("Font")
         if fontfam is not None:
+            if fontfam == "LucidaGrande":
+                fontfam = "Luxi Sans"
+            elif fontfam == "Courier":
+                fontfam = "Courier New"
+            elif fontfam == "GillSans":
+                fontfam == "Arial Narrow"
             fontstuffs.append("font-family: %s"%fontfam)
             
         size = font.get("Size")
