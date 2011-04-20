@@ -305,8 +305,8 @@ class GraffleParser(object):
                 self.svgSetGraffleFont(graphics.get("FontInfo"))
                 
                 x, y, width, height = coords
-                x += graphics['Text'].get('Pad',0)
-                y += graphics['Text'].get('VerticalPad',0)
+                x += float(graphics['Text'].get('Pad',0))
+                y += float(graphics['Text'].get('VerticalPad',0))
                 self.svg_addText(self.svg_current_layer, rtftext = graphics.get("Text").get("Text",""),
                                  x = x, y = y, width = width, height = height)
             self.style.popScope()
