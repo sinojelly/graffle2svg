@@ -327,7 +327,10 @@ class GraffleParser(object):
             coords = self.extractBoundCOordinates(graphic['Bounds'])
             if graphic.get("ImageID") is not None:
                 # TODO: images
-                image_id = graphic["ImageID"]
+                image_id = int(graphic["ImageID"])
+                if len(self.imagelist) <= image_id:
+                    print "Error - image out of range"
+                    return
                 image = self.imagelist[image_id]
                 self.svg_addImage(self.svg_current_layer, bounds = coords, \
                                   href = image)
