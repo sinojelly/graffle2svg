@@ -402,6 +402,12 @@ class GraffleParser(object):
                                         bounds = bounds,
                                         **extra_opts \
                                         )
+        elif shape == "Cloud":
+            bounds = self.extractBoundCOordinates(graphic["Bounds"])
+            self.svg_addCloud(self.svg_current_layer,
+                                        bounds = bounds,
+                                        **extra_opts \
+                                        )
         else:
             print "Don't know how to display Shape %s"%str(graphic['Shape'])
             
@@ -655,6 +661,11 @@ class GraffleParser(object):
         self.svg_addPath(node, [[x + width - x_offset, y],
                                 [x + width - x_offset, y + height]],
                                 closepath=False, **opts)
+                                
+    def svg_addCloud(self, node, bounds, **opts):
+        x, y, width, height = [float(a) for a in bounds]
+        #TODO: draw an actual shape (should abstract the shape scaling etc)
+        self.svg_addRect(node, x=x, y=y, width=width, height=height, **opts)
                              
     def svg_addPath(self, node, pts, **opts):
         # do geometry mapping here
