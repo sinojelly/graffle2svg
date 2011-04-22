@@ -396,6 +396,12 @@ class GraffleParser(object):
                                         bounds = bounds,
                                         **extra_opts \
                                         )
+        elif shape == "Subprocess":
+            bounds = self.extractBoundCOordinates(graphic["Bounds"])
+            self.svg_addSubprocess(self.svg_current_layer,
+                                        bounds = bounds,
+                                        **extra_opts \
+                                        )
         else:
             print "Don't know how to display Shape %s"%str(graphic['Shape'])
             
@@ -634,6 +640,21 @@ class GraffleParser(object):
                                [x + (width / 2), y + height],
                                [x, y + (height / 2)]],
                                 closepath=True, **opts)
+                                
+    def svg_addSubprocess(self, node, bounds, **opts):
+        # TODO: check ISO flowchart specification for correct ratio?
+        x, y, width, height = [float(a) for a in bounds]
+        self.svg_addRect(node, width=width, height=height, x=x, y=y, **opts)
+        # add the vertical lines
+        
+        x_offset = width * 0.1
+        self.svg_addPath(node, [[x + x_offset, y],
+                                [x + x_offset, y + height]],
+                                closepath=False, **opts)
+                                
+        self.svg_addPath(node, [[x + width - x_offset, y],
+                                [x + width - x_offset, y + height]],
+                                closepath=False, **opts)
                              
     def svg_addPath(self, node, pts, **opts):
         # do geometry mapping here
